@@ -1,0 +1,176 @@
+AD1:
+  CHILD:
+   string: "alphanumeric"
+   canbeblank: no
+  DOB:
+   date: "%d/%m/%Y"
+   canbeblank: no
+  DATE_INT:
+   date: "%d/%m/%Y"
+   canbeblank: no
+  DATE_MATCH:
+   date: "%d/%m/%Y"
+   canbeblank: no
+  FOSTER_CARE:
+   category:
+   - code: "0"
+     name: "False"
+   - code: "1"
+     name: "True"
+   dictionary: {"False" : "0", "True" : "1", False: "0", True : "1"}
+   canbeblank: no
+  NB_ADOPTR:
+   numeric: integer
+   canbeblank: no
+  SEX_ADOPTR:
+   category:
+   - code: "M1"
+   - code: "F1"
+   - code: "MM"
+   - code: "FF"
+   - code: "MF"
+   canbeblank: no
+  LS_ADOPTR:
+   category:
+   - code: "L0"
+   - code: "L11"
+   - code: "L12"
+   - code: "L2"
+   - code: "L3"
+   - code: "L4"
+   canbeblank: no
+
+Episodes:
+  CHILD:
+   string: "alphanumeric"
+   canbeblank: no
+  DECOM:
+   date: "%d/%m/%Y"
+   canbeblank: no
+  RNE:
+   category:
+   - code: "S"
+   - code: "L"
+   - code: "P"
+   - code: "T"
+   - code: "B"
+   - code: "U"
+   canbeblank: no
+  LS:
+   category:
+   - code: "C1"
+   - code: "C2"
+   - code: "D1"
+   - code: "E1"
+   - code: "V2"
+   - code: "V3"
+   - code: "V4"
+   - code: "L1"
+   - code: "L2"
+   - code: "L3"
+   - code: "J1"
+   - code: "J2"
+   - code: "J3"
+   canbeblank: no
+  CIN:
+   category:
+   - code: "N1"
+   - code: "N2"
+   - code: "N3"
+   - code: "N4"
+   - code: "N5"
+   - code: "N6"
+   - code: "N7"
+   - code: "N8"
+   canbeblank: no
+  PLACE:
+   category:
+   - code: "A3"
+   - code: "A4"
+   - code: "A5"
+   - code: "A6"
+   - code: "H5"
+   - code: "K1"
+   - code: "K2"
+   - code: "P1"
+   - code: "P2"
+   - code: "P3"
+   - code: "R1"
+   - code: "R2"
+   - code: "R3"
+   - code: "R5"
+   - code: "S1"
+   - code: "T0"
+   - code: "T1"
+   - code: "T2"
+   - code: "T3"
+   - code: "T4"
+   - code: "U1"
+   - code: "U2"
+   - code: "U3"
+   - code: "U4"
+   - code: "U5"
+   - code: "U6"
+   - code: "Z1"
+   canbeblank: no
+  PLACE_PROVIDER:
+   category:
+   - code: "PR0"
+   - code: "PR1"
+   - code: "PR2"
+   - code: "PR3"
+   - code: "PR4"
+   - code: "PR5"
+   canbeblank: no
+  DEC:
+   date: "%d/%m/%Y"
+   canbeblank: yes
+  REC:
+   category:
+   - code: "X1"
+   - code: "E11"
+   - code: "E12"
+   - code: "E2"
+   - code: "E3"
+   - code: "E4A"
+   - code: "E4B"
+   - code: "E13"
+   - code: "E41"
+   - code: "E45"
+   - code: "E46"
+   - code: "E47"
+   - code: "E48"
+   - code: "E5"
+   - code: "E6"
+   - code: "E7"
+   - code: "E9"
+   - code: "E14"
+   - code: "E15"
+   - code: "E16"
+   - code: "E17"
+   - code: "E8"
+   canbeblank: yes
+  REASON_PLACE_CHANGE:
+   category:
+   - code: "CARPL"
+   - code: "CLOSE"
+   - code: "ALLEG"
+   - code: "STAND"
+   - code: "APPRR"
+   - code: "CREQB"
+   - code: "CREQO"
+   - code: "CHILD"
+   - code: "LAREQ"
+   - code: "PLACE"
+   - code: "CUSTOD"
+   - code: "OTHER"
+   canbeblank: yes
+  HOME_POST:
+   string: "alphanumeric"
+   canbeblank: yes
+  PL_POST:
+   string: "alphanumeric"
+   canbeblank: yes
+  URN:
+   string: "alphanumeric"
+   canbeblank: yes
