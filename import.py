@@ -34,6 +34,7 @@ def main(input_folder, output_folder, config, process_missing_only=True):
 
     # Process each LA that needs to be processed
     print("Processing {} LAs: {}".format(len(las_to_process), las_to_process))
+    s903_dfs = {}
     for la in las_to_process:
 
         # Find 903 files in LA folder
@@ -41,7 +42,6 @@ def main(input_folder, output_folder, config, process_missing_only=True):
         print("{} --- Found {} SSDA903 files".format(la, len(s903_files)))
 
         # Read csvs into dict of dataframes
-        s903_dfs = {}
         for i, file in enumerate(s903_files):
             print("File {} out of {}".format(i+1, len(s903_files)))
             print("--- Load file {}".format(i+1))
@@ -113,10 +113,13 @@ def match_load_file(df):
 
 def cleandf(df, config):
     '''Checks the types of each column:
+        - changes floats to integers
         - for dates, passes column through date format function
         - for categories, passes column through category format function
         - for others (strings and integers), passes through other format function'''
     for column in df.columns:
+        if df[column].dtype == "float64":
+            df[column] = df[column].astype("Int64")
         column_type = list(config[column].keys())[0]
         if column_type == "date":
             df[column] = date_check(df[column], config[column], column)
