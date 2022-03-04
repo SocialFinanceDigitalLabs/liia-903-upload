@@ -112,6 +112,14 @@ def main(input_folder, output_folder, config, process_missing_only=True):
                 print(
                     "Failed to match {}: {} to known column names".format(file_name, list(loaded_file.columns)))
 
+        # Concatenate multiple years of dataframes for the same LA
+        concatenated_files = pd.concat(s903_dfs)
+
+        # Remove duplicates from the concatenated file (based on all columns except Unnamed:0 and Year)
+        cleaned = concatenated_files.drop_duplicates(subset=concatenated_files.columns.difference(['Unnamed: 0', 'Year']),
+                                               keep='last')
+        cleaned.to_csv(Outputs + "/concatenated_files_" + la + ".csv")
+
         # PLACEHOLDER Save cleaned dfs for each LA in LA input folder
 
     # Test: print keys of dict
