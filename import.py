@@ -63,9 +63,32 @@ def main(input_folder, output_folder, config, process_missing_only=True):
                 # Check the columns are in the correct format
                 clean_df = cleandf(loaded_file, config[file_type])
 
+                # Degrade sensitive fields:
+                #   - DOB to MOB
+                #   - Postcodes to postcode sectors
+
+                if file_type != "Episodes":
+                    try:
+                        clean_df["DOB"] = clean_df["DOB"].dt.to_period('M').dt.to_timestamp()
+                    except:
+                        pass
+
+                if file_type == "Header":
+                    try:
+                        clean_df["MC_DOB"] = clean_df["MC_DOB"].dt.to_period('M').dt.to_timestamp()
+                    except:
+                        pass
+
+                if file_type == "Episodes":
+                    clean_df["HOME_POST"] = clean_df["HOME_POST"].str.strip()
+                    clean_df["HOME_POST"] = clean_df["HOME_POST"].str[:-2]
+
+                    clean_df["PL_POST"] = clean_df["PL_POST"].str.strip()
+                    clean_df["PL_POST"] = clean_df["PL_POST"].str[:-2]
+
                 # Add year and la as columns to the df
-                clean_df[year] = year
-                clean_df[la] = la
+                clean_df["Year"] = year
+                clean_df["LA"] = la
 
                 # Create module_year name for df
                 df_name = la + "_" + file_type + "_" + year
