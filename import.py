@@ -68,7 +68,7 @@ def main(input_folder, output_folder, config, process_missing_only=True):
                 clean_df[la] = la
 
                 # Create module_year name for df
-                df_name = file_type + year
+                df_name = la + "_" + file_type + "_" + year
 
                 # Add the df to the dfs dict if less than four years old
                 # Find current year and month
@@ -89,10 +89,11 @@ def main(input_folder, output_folder, config, process_missing_only=True):
                 print(
                     "Failed to match {}: {} to known column names".format(file_name, list(loaded_file.columns)))
 
-        # Test: print keys of dict
-        print(s903_dfs.keys())
+        # PLACEHOLDER Save cleaned dfs for each LA in LA input folder
 
-            # PLACEHOLDER Save in output folder
+    # Test: print keys of dict
+    print(s903_dfs.keys())
+
     return
 
 def match_load_file(df):
