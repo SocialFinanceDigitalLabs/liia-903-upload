@@ -64,8 +64,8 @@ def main(input_folder, output_folder, config, process_missing_only=True):
                 clean_df = cleandf(loaded_file, config[file_type])
 
                 # Add year and la as columns to the df
-                clean_df[year] = year
-                clean_df[la] = la
+                clean_df["Year"] = year
+                clean_df["LA"] = la
 
                 # Create module_year name for df
                 df_name = la + "_" + file_type + "_" + year
@@ -88,6 +88,14 @@ def main(input_folder, output_folder, config, process_missing_only=True):
             else:
                 print(
                     "Failed to match {}: {} to known column names".format(file_name, list(loaded_file.columns)))
+
+        # Concatenate multiple years of dataframes for the same LA
+        concatenated_files = pd.concat(s903_dfs)
+
+        # Remove duplicates from the concatenated file (based on all columns except Unnamed:0 and Year)
+        cleaned = concatenated_files.drop_duplicates(subset=concatenated_files.columns.difference(['Unnamed: 0', 'Year']),
+                                               keep='last')
+        cleaned.to_csv(Outputs + "/concatenated_files_" + la + ".csv")
 
         # PLACEHOLDER Save cleaned dfs for each LA in LA input folder
 
