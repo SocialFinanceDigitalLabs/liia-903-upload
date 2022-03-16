@@ -117,10 +117,17 @@ def main(input_folder, output_folder, config, process_missing_only=True):
         # Concatenate multiple years of dataframes for the same LA
         concatenated_files = pd.concat(s903_dfs)
 
-        # Remove duplicates from the concatenated file (based on all columns except Unnamed:0 and Year)
-        cleaned = concatenated_files.drop_duplicates(subset=concatenated_files.columns.difference(['Unnamed: 0', 'Year']),
-                                               keep='last')
-        cleaned.to_csv(Outputs + "/concatenated_files_" + la + ".csv")
+        # Create a single index column to identify which csv the dataframe originated from
+        concatenated_files = concatenated_files.reset_index(level=0)
+        concatenated_files = concatenated_files.rename(columns={"level_0": "INDEX"})
+
+        # Remove years from the index column to keep multiple years in one file
+        concatenated_files["INDEX"] = concatenated_files["INDEX"].str[:-5]
+
+        # Split the concatenated dataframe into separate 903 files to save
+        for i, x in concatenated_files.groupby('INDEX'):
+            p = os.path.join(Inputs + "\\" + la, "SSDA903{}_cleaned.csv".format(i[len(la):]))
+            x.to_csv(p, index=False)
 
         # PLACEHOLDER Save cleaned dfs for each LA in LA input folder
 
