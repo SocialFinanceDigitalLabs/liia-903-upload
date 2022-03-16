@@ -1,8 +1,10 @@
+from asyncio.windows_events import NULL
 import os
 import glob
 import pandas as pd
 import yaml
 from datetime import date
+from datetime import datetime
 from columns import column_names
 
 main_folder = os.getcwd()
@@ -158,17 +160,32 @@ def date_check(series, config, name):
        - where it can't apply this format, it returns an error for the field
        - where a field should always have an entry, it provides a count of blank rows to the user'''
     blanks = 0
-    # Tries to format non-blank entries; returns error if not possible
-    try:
-        series = pd.to_datetime(series)
-    except:
-        print("Error - {} cannot be parsed as a date".format(name))
+    errors = 0
+    # Tries to detect strings as correct date format;
+    # when it cannot:
+    # deletes entry (to minimise risk of disclosing sensitive information)
+    # and returns error
+    bool_series = pd.notnull(series)
+    for row in series[bool_series]:
+        try:
+            datetime.strptime(row, config['date'])
+        except:
+            series = series.replace(row,"")
+            errors += 1
+    # Counts errors and reports back
+    if errors > 0:
+        print("{} - {} entries could not be formatted as dates".format(name, errors))
     # Counts blank entries where there shouldn't be any
     if config['canbeblank'] is False:
         blanks = series.isnull().sum()
     # Outputs non-zero blank counts for user
     if blanks > 0:
         print("{} - {} blank entries found".format(name, blanks))
+    # Configures series to dates, having deleting non-conforming entries
+    try:
+        series = pd.to_datetime(series)
+    except:
+        pass
     return series
 
 def cat_check(series, config, name):
