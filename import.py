@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import os
 import glob
 import pandas as pd
@@ -22,6 +21,9 @@ def main(input_folder, output_folder, config, process_missing_only=True):
     - Concatenates multiple LAs' 903s into single csvs
     - Outputs the merged/cleaned csvs to LA and LIIA folders'''
 
+    # Create dictionary for all files
+    all_dfs = {}
+
     # Identify LAs
     # All
     all_las = os.listdir(input_folder)
@@ -36,9 +38,11 @@ def main(input_folder, output_folder, config, process_missing_only=True):
 
     # Process each LA that needs to be processed
     print("Processing {} LAs: {}".format(len(las_to_process), las_to_process))
-    s903_dfs = {}
     for la in las_to_process:
 
+        # Create LA file dictionary
+        LA_dfs = {}
+        
         # Find 903 files in LA folder
         s903_files = glob.glob(os.path.join(input_folder, la, "*.csv"))
         print("{} --- Found {} SSDA903 files".format(la, len(s903_files)))
@@ -107,7 +111,7 @@ def main(input_folder, output_folder, config, process_missing_only=True):
                 
                 # Add file to dfs dict if return is less than four years old
                 if latest_return - int(year) <= 3:
-                    s903_dfs[df_name] = clean_df
+                    LA_dfs[df_name] = [clean_df, file_type]
 
             # If file is not a match provide file details to user
             else:
@@ -115,7 +119,7 @@ def main(input_folder, output_folder, config, process_missing_only=True):
                     "Failed to match {}: {} to known column names".format(file_name, list(loaded_file.columns)))
 
         # Concatenate multiple years of dataframes for the same LA
-        concatenated_files = pd.concat(s903_dfs)
+        concatenated_files = pd.concat(LA_dfs)
 
         # Create a single index column to identify which csv the dataframe originated from
         concatenated_files = concatenated_files.reset_index(level=0)
@@ -125,14 +129,15 @@ def main(input_folder, output_folder, config, process_missing_only=True):
         concatenated_files["INDEX"] = concatenated_files["INDEX"].str[:-5]
 
         # Split the concatenated dataframe into separate 903 files to save
+        # TO FIX: THIS PROCESS NEEDS TO MAINTAIN ORIGINAL FILE COLUMN STRUCTURE
         for i, x in concatenated_files.groupby('INDEX'):
             p = os.path.join(Inputs + "\\" + la, "SSDA903{}_cleaned.csv".format(i[len(la):]))
             x.to_csv(p, index=False)
 
-        # PLACEHOLDER Save cleaned dfs for each LA in LA input folder
+    # PLACEHOLDER: Concatenate all dataframes in all_files dict
 
     # Test: print keys of dict
-    print(s903_dfs.keys())
+    print(all_dfs.keys())
 
     return
 
