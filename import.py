@@ -96,9 +96,6 @@ def main(input_folder, output_folder, config, process_missing_only=True):
                 clean_df["Year"] = year
                 clean_df["LA"] = la
 
-                # Create module_year name for df
-                df_name = la + "_" + file_type + "_" + year
-
                 # Add the df to the dfs dict if less than four years old
                 # Find current year and month
                 current_year = date.today().year
@@ -109,35 +106,43 @@ def main(input_folder, output_folder, config, process_missing_only=True):
                     latest_return = current_year - 1
                 else: latest_return = current_year
                 
-                # Add file to dfs dict if return is less than four years old
+                # if return is less than four years old:
+                # adds df to la_dfs dict within list corresponding to file type
                 if latest_return - int(year) <= 3:
-                    LA_dfs[df_name] = [clean_df, file_type]
+                    if file_type in LA_dfs.keys():
+                        LA_dfs[file_type].append(clean_df)
+                    else:
+                        LA_dfs[file_type] = []
+                        LA_dfs[file_type].append(clean_df)
 
             # If file is not a match provide file details to user
             else:
                 print(
                     "Failed to match {}: {} to known column names".format(file_name, list(loaded_file.columns)))
 
-        # Concatenate multiple years of dataframes for the same LA
-        concatenated_files = pd.concat(LA_dfs)
+        # Concatenate multiple years of dfs for the same LA by file type
+        # De-duplicates Episodes files based on specified fields
+        # Output csv of concatenated files in LA folder
+        # Add concatenated file to all_files dictionary
+        p = os.path.join(Inputs, la, "Outputs")
+        for key in LA_dfs.keys():
+            df_name = la + "_" + key
+            concatenated_file = pd.concat(LA_dfs[key])
+            if key == "Episodes":
+                concatenated_file = concatenated_file.sort_values('Year', ascending = False)
+                concatenated_file = concatenated_file.drop_duplicates(subset=['CHILD', 'DECOM', 'LS', 'PLACE', 'PLACE_PROVIDER', 'PL_POST'], keep = 'first')
+            concatenated_file.to_csv(os.path.join(p, "{}_cleaned.csv".format(df_name)))
+            if key in all_dfs.keys():
+                all_dfs[key].append(concatenated_file)
+            else:
+                all_dfs[key] = []
+                all_dfs[key].append(concatenated_file)
 
-        # Create a single index column to identify which csv the dataframe originated from
-        concatenated_files = concatenated_files.reset_index(level=0)
-        concatenated_files = concatenated_files.rename(columns={"level_0": "INDEX"})
-
-        # Remove years from the index column to keep multiple years in one file
-        concatenated_files["INDEX"] = concatenated_files["INDEX"].str[:-5]
-
-        # Split the concatenated dataframe into separate 903 files to save
-        # TO FIX: THIS PROCESS NEEDS TO MAINTAIN ORIGINAL FILE COLUMN STRUCTURE
-        for i, x in concatenated_files.groupby('INDEX'):
-            p = os.path.join(Inputs + "\\" + la, "SSDA903{}_cleaned.csv".format(i[len(la):]))
-            x.to_csv(p, index=False)
-
-    # PLACEHOLDER: Concatenate all dataframes in all_files dict
-
-    # Test: print keys of dict
-    print(all_dfs.keys())
+    # Concatenate multiple las' dfs by file type
+    # Output csv of concatenated files in Outputs folder
+    for key in all_dfs.keys():
+        concatenated_file = pd.concat(all_dfs[key])
+        concatenated_file.to_csv(os.path.join(Outputs, "{}_cleaned.csv".format(key)))
 
     return
 
