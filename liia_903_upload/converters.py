@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 def to_category(string, categories):
     for code in categories:
         if str(string).lower() == str(code['code']).lower():
@@ -20,3 +19,20 @@ def to_date(string, dateformat):
         string = 'Not in proper format: {}'.format(string)
     return string
     # If time, add here the matching report
+
+
+def to_short_postcode(string):
+    """
+    Remove all whitespace from postcodes and the last two digits for anonymity
+    """
+    string = string.strip()
+    string = string[:-2]
+    return string
+
+
+def to_month_only_dob(string):
+    """
+    Convert dates of birth into month and year of birth for anonymity
+    """
+    dob = datetime.strptime(string, "%Y-%m")
+    return dob

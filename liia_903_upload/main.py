@@ -1,11 +1,15 @@
 from pathlib import Path
+import tablib
+
 from sfdata_stream_parser import events, checks
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
-import tablib
+
+from liia_903_upload.filters import clean
+from liia_903_upload.degrade import degrade
 
 
 def findfiles():
-    data_dir = Path("903")
+    data_dir = Path(r"C:\Users\patrick.troy\OneDrive - Social Finance Ltd\Work\Python\liia 903 upload\903")
     for p in data_dir.glob("**/*.csv"):
         yield events.StartContainer(path=p)
         yield events.EndContainer(path=p)
@@ -43,7 +47,8 @@ def main():
     stream = findfiles()
     stream = add_filename(stream)
     stream = parse_csv(stream)
-    # stream = fix_label(stream)
+    stream = clean(stream)
+    stream = degrade(stream)
     for e in stream:
         print(e.as_dict())
 

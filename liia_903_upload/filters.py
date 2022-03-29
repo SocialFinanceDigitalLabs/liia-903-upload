@@ -1,8 +1,8 @@
 from sfdata_stream_parser.checks import type_check
-from sfdata_stream_parser.events import StartElement, EndElement
+from sfdata_stream_parser.events import StartElement
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 
-from liia_903_upload.converters import to_date, to_category
+from liia_903_upload.converters import to_date, to_category, to_short_postcode
 
 
 @streamfilter(check=type_check(StartElement), fail_function=pass_event, error_function=pass_event)
