@@ -1,4 +1,6 @@
 from datetime import datetime
+import datetime
+
 
 def to_category(string, categories):
     for code in categories:
@@ -30,9 +32,9 @@ def to_short_postcode(string):
     return string
 
 
-def to_month_only_dob(string):
+def to_month_only_dob(date):
     """
     Convert dates of birth into month and year of birth for anonymity
     """
-    dob = datetime.strptime(string, "%Y-%m")
+    dob = date.strftime("%Y-%m")
     return dob

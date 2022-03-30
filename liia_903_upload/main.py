@@ -9,7 +9,7 @@ from liia_903_upload.degrade import degrade
 
 
 def findfiles():
-    data_dir = Path(r"C:\Users\patrick.troy\OneDrive - Social Finance Ltd\Work\Python\liia 903 upload\903")
+    data_dir = Path(r"C:\Users\patrick.troy\OneDrive - Social Finance Ltd\Work\Python\liia 903 upload\LDS")
     for p in data_dir.glob("**/*.csv"):
         yield events.StartContainer(path=p)
         yield events.EndContainer(path=p)
