@@ -1,5 +1,4 @@
 from datetime import datetime
-import datetime
 
 
 def to_category(string, categories):
@@ -31,7 +30,7 @@ def to_short_postcode(string):
         string = string.strip()
         string = string[:-2]
     except:
-        string = "Not in proper format"
+        pass
     return string
 
 
@@ -42,5 +41,5 @@ def to_month_only_dob(date):
     try:
         dob = date.strftime("%Y-%m")
     except:
-        dob = "Not in proper format"
+        pass
     return dob
