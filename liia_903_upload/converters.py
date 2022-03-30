@@ -27,8 +27,11 @@ def to_short_postcode(string):
     """
     Remove all whitespace from postcodes and the last two digits for anonymity
     """
-    string = string.strip()
-    string = string[:-2]
+    try:
+        string = string.strip()
+        string = string[:-2]
+    except:
+        string = "Not in proper format"
     return string
 
 
@@ -36,5 +39,8 @@ def to_month_only_dob(date):
     """
     Convert dates of birth into month and year of birth for anonymity
     """
-    dob = date.strftime("%Y-%m")
+    try:
+        dob = date.strftime("%Y-%m")
+    except:
+        dob = "Not in proper format"
     return dob
