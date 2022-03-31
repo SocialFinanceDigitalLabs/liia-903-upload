@@ -18,7 +18,8 @@ def degrade_postcodes(event):
 
 @streamfilter(check=type_check(StartElement), fail_function=pass_event, error_function=pass_event)
 def degrade_dob(event):
-    text = to_month_only_dob(event.text)
+    dob = event.config["DOB"]
+    text = to_month_only_dob(event.text, dob)
     return event.from_event(event, text=text)
 
 

@@ -43,9 +43,10 @@ def to_month_only_dob(date):
     Convert dates of birth into month and year of birth for anonymity
     """
     try:
-        date = date.strftime("%Y-%m")
+        date = date.strftime("%Y-%m-01")
     except ValueError:
         date = ""
     except TypeError:
         date = ""
     return date
+
