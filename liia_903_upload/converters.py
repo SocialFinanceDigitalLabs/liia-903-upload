@@ -8,7 +8,7 @@ def to_category(string, categories):
         elif 'name' in code:
             if str(code['name']).lower() in str(string).lower():
                 return code['code']
-    return 'Not in proper format: {}'.format(string)
+    return ""
     # If time, add here the matching report
 
 
@@ -16,8 +16,10 @@ def to_date(string, dateformat):
     string = string.replace('/', '-')
     try:
         datetime.strptime(string, dateformat) # Check this is possible
-    except:
-        string = 'Not in proper format: {}'.format(string)
+    except ValueError:
+        string = ""
+    except TypeError:
+        string = ""
     return string
     # If time, add here the matching report
 
@@ -29,7 +31,9 @@ def to_short_postcode(string):
     try:
         string = string.strip()
         string = string[:-2]
-    except:
+    except ValueError:
+        pass
+    except TypeError:
         pass
     return string
 
@@ -39,7 +43,9 @@ def to_month_only_dob(date):
     Convert dates of birth into month and year of birth for anonymity
     """
     try:
-        dob = date.strftime("%Y-%m")
-    except:
+        date = date.strftime("%Y-%m")
+    except ValueError:
         pass
-    return dob
+    except TypeError:
+        pass
+    return date
