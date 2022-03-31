@@ -21,7 +21,6 @@ def add_filename(event):
 
 
 def log_error(event, ex, *arg, **kwargs):
-    print(ex)
     return event
 
 
