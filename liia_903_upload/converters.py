@@ -32,9 +32,9 @@ def to_short_postcode(string):
         string = string.strip()
         string = string[:-2]
     except ValueError:
-        pass
+        string = ""
     except TypeError:
-        pass
+        string = ""
     return string
 
 
@@ -45,7 +45,7 @@ def to_month_only_dob(date):
     try:
         date = date.strftime("%Y-%m")
     except ValueError:
-        pass
+        date = ""
     except TypeError:
-        pass
+        date = ""
     return date
