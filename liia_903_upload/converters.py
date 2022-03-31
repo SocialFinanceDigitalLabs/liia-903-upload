@@ -2,6 +2,10 @@ from datetime import datetime
 
 
 def to_category(string, categories):
+    """
+    Matches a string to a category based on categories given in a config file
+    return blank if no categories found
+    """
     for code in categories:
         if str(string).lower() == str(code['code']).lower():
             return code['code']
@@ -9,24 +13,26 @@ def to_category(string, categories):
             if str(code['name']).lower() in str(string).lower():
                 return code['code']
     return ""
-    # If time, add here the matching report
 
 
 def to_date(string, dateformat):
-    string = string.replace('/', '-')
+    """
+    Convert a string to a date based on the dateformat e.g. "%d/%m/%Y"
+    return blank if not in the right format
+    """
     try:
-        datetime.strptime(string, dateformat) # Check this is possible
+        string = datetime.strptime(string, dateformat) # Check this is possible
     except ValueError:
         string = ""
     except TypeError:
         string = ""
     return string
-    # If time, add here the matching report
 
 
 def to_short_postcode(string):
     """
-    Remove all whitespace from postcodes and the last two digits for anonymity
+    Remove whitespace from the beginning and end of postcodes and the last two digits for anonymity
+    return blank if not in the right format
     """
     try:
         string = string.strip()
@@ -41,6 +47,7 @@ def to_short_postcode(string):
 def to_month_only_dob(date):
     """
     Convert dates of birth into month and year of birth for anonymity
+    return blank if not in the right format
     """
     try:
         date = date.strftime("%Y-%m-01")
@@ -49,4 +56,3 @@ def to_month_only_dob(date):
     except TypeError:
         date = ""
     return date
-

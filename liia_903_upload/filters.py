@@ -7,6 +7,9 @@ from liia_903_upload.converters import to_date, to_category
 
 @streamfilter(check=type_check(StartElement), fail_function=pass_event, error_function=pass_event)
 def clean_dates(event):
+    """
+    Convert all values that should be dates to dates based on the config.yaml file
+    """
     date = event.config['date']
     text = to_date(event.text, date)
     return event.from_event(event, text=text)
@@ -14,12 +17,18 @@ def clean_dates(event):
 
 @streamfilter(check=type_check(StartElement), fail_function=pass_event, error_function=pass_event)
 def clean_categories(event):
+    """
+    Convert all values that should be categories to categories based on the config.yaml file
+    """
     category = event.config['category']
     text = to_category(event.text, category)
     return event.from_event(event, text=text)
 
 
 def clean(stream):
+    """
+    Compile the cleaning functions
+    """
     stream = clean_dates(stream)
     stream = clean_categories(stream)
     return stream
