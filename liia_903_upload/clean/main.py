@@ -6,7 +6,6 @@ from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 
 from liia_903_upload.clean.filters import clean
 from liia_903_upload.clean.degrade import degrade
-from liia_903_upload.clean.populate import add_la_column, add_year_column
 
 
 def findfiles():
@@ -34,7 +33,7 @@ def parse_csv(event):
             yield events.StartRow.from_event(event)
             for c_ix, cell in enumerate(row):
                 yield events.Cell.from_event(event, r_ix=r_ix, c_ix=c_ix, label=data.headers[c_ix], cell=cell)
-                yield events.EndRow.from_event(event)
+            yield events.EndRow.from_event(event)
         yield events.EndTable.from_event(event)
 
 
@@ -47,8 +46,8 @@ def main():
     stream = findfiles()
     stream = add_filename(stream)
     stream = parse_csv(stream)
-    stream = clean(stream)
-    stream = degrade(stream)
+    # stream = clean(stream)
+    # stream = degrade(stream)
     for e in stream:
         print(e.as_dict())
 

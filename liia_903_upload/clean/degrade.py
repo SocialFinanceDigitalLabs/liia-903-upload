@@ -3,7 +3,6 @@ from sfdata_stream_parser.events import StartElement
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 
 from liia_903_upload.clean.converters import to_short_postcode, to_month_only_dob
-from liia_903_upload.clean.filters import add_config
 
 
 @streamfilter(check=type_check(StartElement), fail_function=pass_event, error_function=pass_event)
@@ -34,7 +33,6 @@ def degrade(stream):
     """
     Compile the degrading functions
     """
-    stream = add_config(stream)
     stream = degrade_postcodes(stream)
     stream = degrade_dob(stream)
     return stream
