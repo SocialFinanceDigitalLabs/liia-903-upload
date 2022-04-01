@@ -4,8 +4,9 @@ import tablib
 from sfdata_stream_parser import events, checks
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 
-from liia_903_upload.filters import clean
-from liia_903_upload.degrade import degrade
+from liia_903_upload.clean.filters import clean
+from liia_903_upload.clean.degrade import degrade
+from liia_903_upload.clean.populate import add_la_column, add_year_column
 
 
 def findfiles():

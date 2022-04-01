@@ -3,7 +3,7 @@ from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 import re
 
 
-@streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event)
+@streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event, error_function=pass_event)
 def add_year_column(event):
     """
     Searches the filename for the year by finding any four-digit number starting with 20
@@ -13,7 +13,7 @@ def add_year_column(event):
     return year
 
 
-@streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event)
+@streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event, error_function=pass_event)
 def add_la_column(event):
     """
     Searches the filename for the local authority by finding the folder name before the 903 folder
