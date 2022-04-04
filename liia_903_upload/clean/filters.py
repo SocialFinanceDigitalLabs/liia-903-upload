@@ -10,7 +10,7 @@ def clean_dates(event):
     """
     Convert all values that should be dates to dates based on the config.yaml file
     """
-    date = event.config
+    date = event.cell_config
     text = to_date(event.text, date)
     return event.from_event(event, text=text)
 
@@ -20,7 +20,7 @@ def clean_categories(event):
     """
     Convert all values that should be categories to categories based on the config.yaml file
     """
-    category = event.config
+    category = event.cell_config
     text = to_category(event.text, category)
     return event.from_event(event, text=text)
 

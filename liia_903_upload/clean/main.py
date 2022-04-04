@@ -5,7 +5,7 @@ from sfdata_stream_parser import events, checks
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 
 from liia_903_upload.clean.filters import clean
-from liia_903_upload.clean.populate import populate
+from liia_903_upload.clean.populate import populate, inherit_populate
 from liia_903_upload.clean.degrade import degrade
 from liia_903_upload.clean.file_creator import coalesce_row
 from liia_903_upload.clean.config import inherit_table_name, add_table_name, load_config, match_config_to_cell
@@ -44,7 +44,7 @@ def parse_csv(event):
         for r_ix, row in enumerate(data):
             yield events.StartRow.from_event(event)
             for c_ix, cell in enumerate(row):
-                yield events.Cell.from_event(event, r_ix=r_ix, c_ix=c_ix, label=data.headers[c_ix], cell=cell)
+                yield events.Cell.from_event(event, r_ix=r_ix, c_ix=c_ix, header=data.headers[c_ix], cell=cell)
             yield events.EndRow.from_event(event)
         yield events.EndTable.from_event(event)
 
@@ -54,12 +54,12 @@ def main():
     stream = findfiles()
     stream = add_filename(stream)
     stream = parse_csv(stream)
-    # stream = inherit_table_name(stream)
-    # stream = add_table_name(stream)
+    stream = add_table_name(stream)
+    stream = inherit_table_name(stream)
     # stream = match_config_to_cell(stream, config)
     # stream = clean(stream)
     # stream = degrade(stream)
-    # stream = populate(stream)
+    stream = populate(stream)
     # stream = coalesce_row(stream)
     for e in stream:
         print(e.as_dict())

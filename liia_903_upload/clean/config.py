@@ -7,6 +7,16 @@ from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 from sfdata_stream_parser.checks import type_check
 
 
+@streamfilter(check=type_check(events.StartTable), fail_function=pass_event, error_function=pass_event)
+def add_table_name(event):
+    """
+    Match the loaded table name against one of the 10 903 file names
+    """
+    for table_name, expected_columns in column_names.items():
+        if set(event.headers) == set(expected_columns):
+            return event.from_event(event, table_name=table_name)
+
+
 def inherit_table_name(stream):
     """
     Return the table name associated to a row to identify each row's table name
@@ -22,25 +32,16 @@ def inherit_table_name(stream):
         yield event
 
 
-@streamfilter(check=type_check(events.StartTable), fail_function=pass_event, error_function=pass_event)
-def add_table_name(event):
-    """
-    Match the loaded table name against one of the 10 903 file names
-    """
-    for table_name, expected_columns in column_names.items():
-        if set(event.headers) == set(expected_columns):
-            return event.from_event(event, table_name=table_name)
-
-
 def match_config_to_cell(event, config):
     """
     Match the cell to the config file given the table name and cell header
+    the config file should be a set of dictionaries for each table, headers within those tables
+    and config rules for those headers
     """
-    for column in event.headers:
-        table_config = config[event.table_name]
-        header_config = table_config[column]
-        cell_config = list(header_config.values())[0]
-        return event.from_event(event, cell_config=cell_config)
+    table_config = config[event.table_name]
+    header_config = table_config[event.header]
+    cell_config = list(header_config.values())[0]
+    return event.from_event(event, cell_config=cell_config)
 
 
 def load_config():
