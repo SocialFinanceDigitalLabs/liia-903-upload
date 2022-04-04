@@ -49,17 +49,12 @@ def parse_csv(event):
         yield events.EndTable.from_event(event)
 
 
-# @streamfilter(check=checks.type_check(events.Cell), fail_function=pass_event)
-# def fix_label(event):
-#     return event.from_event(event, label=f"column-{event.c_ix + 1}")
-
-
 def main():
     config = load_config()
     stream = findfiles()
     stream = add_filename(stream)
     stream = parse_csv(stream)
-    stream = inherit_table_name(stream)
+    # stream = inherit_table_name(stream)
     # stream = add_table_name(stream)
     # stream = match_config_to_cell(stream, config)
     # stream = clean(stream)

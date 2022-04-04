@@ -1,6 +1,7 @@
+import re
+
 from sfdata_stream_parser import events, checks
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
-import re
 
 
 @streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event, error_function=pass_event)
