@@ -5,6 +5,7 @@ from sfdata_stream_parser import events, checks
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 
 from liia_903_upload.clean.filters import clean
+from liia_903_upload.clean.populate import populate
 from liia_903_upload.clean.degrade import degrade
 from liia_903_upload.clean.file_creator import coalesce_row
 from liia_903_upload.clean.config import inherit_table_name, add_table_name, load_config, match_config_to_cell
@@ -63,6 +64,7 @@ def main():
     # stream = match_config_to_cell(stream, config)
     # stream = clean(stream)
     # stream = degrade(stream)
+    # stream = populate(stream)
     # stream = coalesce_row(stream)
     for e in stream:
         print(e.as_dict())

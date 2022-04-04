@@ -4,6 +4,7 @@ from datetime import datetime
 def to_category(string, categories):
     """
     Matches a string to a category based on categories given in a config file
+    the config file should contain a dictionary for each category for this function to loop through
     return blank if no categories found
     """
     for code in categories:

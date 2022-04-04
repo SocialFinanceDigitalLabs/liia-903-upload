@@ -10,7 +10,7 @@ def add_year_column(event):
     """
     file_dir = event.from_event(event, filename=str(event.path.resolve()))
     year = re.search(r"20\d{2}", file_dir).group(0)
-    return year
+    return event.from_event(event, year=year)
 
 
 @streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event, error_function=pass_event)
@@ -20,4 +20,13 @@ def add_la_column(event):
     """
     file_dir = event.from_event(event, filename=str(event.path.resolve()))
     la = re.search(r".*\\(.*)\\903", file_dir).group(1)
-    return la
+    return event.from_event(event, la=la)
+
+
+def populate(stream):
+    """
+    Compile the populate functions
+    """
+    stream = add_year_column(stream)
+    stream = add_la_column(stream)
+    return stream
