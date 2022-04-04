@@ -1,5 +1,6 @@
 import functools
 
+import tablib
 from sfdata_stream_parser import events
 
 
@@ -22,6 +23,14 @@ def coalesce_row(stream):
             row.append(event.cell)
         else:
             yield event
+
+
+def create_tables(stream):
+    """
+    Append all the rows for a given table_name to create one concatenated dataframe
+    """
+    data = tablib.Dataset()
+
 
 
 @functools.cache

@@ -10,9 +10,9 @@ def clean_dates(event):
     """
     Convert all values that should be dates to dates based on the config.yaml file
     """
-    date = event.cell_config
+    date = event.config_dict["date"]
     text = to_date(event.text, date)
-    return event.from_event(event, text=text)
+    return event.from_event(event, cell=text)
 
 
 @streamfilter(check=type_check(events.StartElement), fail_function=pass_event, error_function=pass_event)
@@ -20,9 +20,9 @@ def clean_categories(event):
     """
     Convert all values that should be categories to categories based on the config.yaml file
     """
-    category = event.cell_config
+    category = event.config_dict["category"]
     text = to_category(event.text, category)
-    return event.from_event(event, text=text)
+    return event.from_event(event, cell=text)
 
 
 def clean(stream):

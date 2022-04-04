@@ -43,7 +43,7 @@ config = load_config()
 # cleandf(loaded_file, config["AD1"])
 
 table_config = config["AD1"]
-header_config = table_config["DOB"]
-cell_config = list(header_config.values())[0]
+header_config = table_config["SEX_ADOPTR"]
+cell_config = header_config["category"]
 
 print(cell_config)

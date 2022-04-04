@@ -39,9 +39,8 @@ def match_config_to_cell(event, config):
     and config rules for those headers
     """
     table_config = config[event.table_name]
-    header_config = table_config[event.header]
-    cell_config = list(header_config.values())[0]
-    return event.from_event(event, cell_config=cell_config)
+    config_dict = table_config[event.header]
+    return event.from_event(event, config_dict=config_dict)
 
 
 def load_config():
