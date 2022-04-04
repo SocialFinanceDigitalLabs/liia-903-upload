@@ -1,7 +1,10 @@
+from pathlib import Path
+from columns import column_names
+import yaml
+
 from sfdata_stream_parser import events
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 from sfdata_stream_parser.checks import type_check
-from columns import column_names
 
 
 def inherit_table_name(stream):
@@ -29,5 +32,24 @@ def add_table_name(event):
             return event.from_event(event, table_name=table_name)
 
 
-def match_config_to_cell(config):
-    column_type = list(config[column].keys())[0]
+def match_config_to_cell(event, config):
+    """
+    Match the cell to the config file given the table name and cell header
+    """
+    for column in event.headers:
+        table_config = config[event.table_name]
+        header_config = table_config[column]
+        cell_config = list(header_config.values())[0]
+        return event.from_event(event, cell_config=cell_config)
+
+
+def load_config():
+    """
+    Find and return the config yaml file
+    """
+    data_dir = Path(r"C:\Users\patrick.troy\OneDrive - Social Finance Ltd\Work\Python\liia 903 upload")
+    for yaml_file in data_dir.glob("**/*.yaml"):
+        yaml_file = yaml_file
+        with open(yaml_file) as f:
+            config = yaml.load(f, Loader=yaml.FullLoader)
+            return config

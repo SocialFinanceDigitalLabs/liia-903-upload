@@ -7,7 +7,7 @@ from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 from liia_903_upload.clean.filters import clean
 from liia_903_upload.clean.degrade import degrade
 from liia_903_upload.clean.file_creator import coalesce_row
-from liia_903_upload.clean.config import inherit_table_name, add_table_name
+from liia_903_upload.clean.config import inherit_table_name, add_table_name, load_config, match_config_to_cell
 
 
 def findfiles():
@@ -54,11 +54,13 @@ def parse_csv(event):
 
 
 def main():
+    config = load_config()
     stream = findfiles()
     stream = add_filename(stream)
     stream = parse_csv(stream)
     stream = inherit_table_name(stream)
-    stream = add_table_name(stream)
+    # stream = add_table_name(stream)
+    # stream = match_config_to_cell(stream, config)
     # stream = clean(stream)
     # stream = degrade(stream)
     # stream = coalesce_row(stream)

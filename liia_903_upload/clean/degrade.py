@@ -24,8 +24,12 @@ def degrade_dob(event):
     """
     Convert all values that should be dates of birth to months and year of birth
     """
-    dob = event.config["DOB"]
-    text = to_month_only_dob(event.text, dob)
+    if event.label == "DOB":
+        text = to_month_only_dob(event.text)
+    elif event.label == "MC_DOB":
+        text = to_month_only_dob(event.text)
+    else:
+        pass
     return event.from_event(event, text=text)
 
 

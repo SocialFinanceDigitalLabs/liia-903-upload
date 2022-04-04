@@ -46,7 +46,7 @@ def to_short_postcode(string):
 
 def to_month_only_dob(date):
     """
-    Convert dates of birth into month and year of birth for anonymity
+    Convert dates of birth into month and year of birth starting from 1st of each month for anonymity
     return blank if not in the right format
     """
     try:
