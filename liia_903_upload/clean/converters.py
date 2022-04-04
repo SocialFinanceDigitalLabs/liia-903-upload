@@ -56,4 +56,6 @@ def to_month_only_dob(date):
         date = ""
     except TypeError:
         date = ""
+    except AttributeError:
+        date = ""
     return date

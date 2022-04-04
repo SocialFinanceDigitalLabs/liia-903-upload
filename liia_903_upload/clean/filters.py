@@ -5,23 +5,23 @@ from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 from liia_903_upload.clean.converters import to_date, to_category
 
 
-@streamfilter(check=type_check(events.StartElement), fail_function=pass_event, error_function=pass_event)
+@streamfilter(check=type_check(events.Cell), fail_function=pass_event, error_function=pass_event)
 def clean_dates(event):
     """
     Convert all values that should be dates to dates based on the config.yaml file
     """
     date = event.config_dict["date"]
-    text = to_date(event.text, date)
+    text = to_date(event.cell, date)
     return event.from_event(event, cell=text)
 
 
-@streamfilter(check=type_check(events.StartElement), fail_function=pass_event, error_function=pass_event)
+@streamfilter(check=type_check(events.Cell), fail_function=pass_event, error_function=pass_event)
 def clean_categories(event):
     """
     Convert all values that should be categories to categories based on the config.yaml file
     """
     category = event.config_dict["category"]
-    text = to_category(event.text, category)
+    text = to_category(event.cell, category)
     return event.from_event(event, cell=text)
 
 

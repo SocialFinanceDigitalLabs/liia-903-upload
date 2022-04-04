@@ -46,4 +46,4 @@ table_config = config["AD1"]
 header_config = table_config["SEX_ADOPTR"]
 cell_config = header_config["category"]
 
-print(cell_config)
+print(table_config["CHILD"]["string"])

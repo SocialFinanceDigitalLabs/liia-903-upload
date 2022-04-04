@@ -32,6 +32,7 @@ def inherit_table_name(stream):
         yield event
 
 
+@streamfilter(check=type_check(events.Cell))
 def match_config_to_cell(event, config):
     """
     Match the cell to the config file given the table name and cell header

@@ -56,11 +56,11 @@ def main():
     stream = parse_csv(stream)
     stream = add_table_name(stream)
     stream = inherit_table_name(stream)
-    # stream = match_config_to_cell(stream, config)
+    # stream = match_config_to_cell(stream, config=config)
     # stream = clean(stream)
-    stream = degrade(stream)
-    # stream = populate(stream)
-    # stream = coalesce_row(stream)
+    # stream = degrade(stream)
+    stream = populate(stream)
+    stream = coalesce_row(stream)
     for e in stream:
         print(e.as_dict())
 

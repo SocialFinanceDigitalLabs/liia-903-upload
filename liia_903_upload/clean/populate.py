@@ -4,7 +4,7 @@ from sfdata_stream_parser import events, checks
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 
 
-@streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event, error_function=pass_event)
+@streamfilter(check=checks.type_check(events.StartRow), fail_function=pass_event, error_function=pass_event)
 def add_year_column(event):
     """
     Searches the filename for the year by finding any four-digit number starting with 20
@@ -14,7 +14,7 @@ def add_year_column(event):
     return event.from_event(event, year=year)
 
 
-@streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event, error_function=pass_event)
+@streamfilter(check=checks.type_check(events.StartRow), fail_function=pass_event, error_function=pass_event)
 def add_la_column(event):
     """
     Searches the filename for the local authority by finding the folder name before the 903 folder
@@ -24,6 +24,7 @@ def add_la_column(event):
     return event.from_event(event, la=la)
 
 
+@streamfilter()
 def inherit_year(stream):
     """
     Return the year associated to a row to identify each row's year
@@ -39,6 +40,7 @@ def inherit_year(stream):
         yield event
 
 
+@streamfilter()
 def inherit_la(stream):
     """
     Return the local authority name associated to a row to identify each row's local authority
