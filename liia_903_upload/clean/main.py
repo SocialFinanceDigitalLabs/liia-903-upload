@@ -21,7 +21,7 @@ def findfiles():
         yield events.EndContainer(path=p)
 
 
-@streamfilter
+@streamfilter(check=checks.type_check(events.StartContainer))
 def add_filename(event):
     """
     Return the filename including the path to that file, so we can extract year and LA name data
@@ -53,13 +53,13 @@ def main():
     config = load_config()
     stream = findfiles()
     stream = add_filename(stream)
+    stream = populate(stream)
     stream = parse_csv(stream)
     stream = add_table_name(stream)
     stream = inherit_table_name(stream)
-    # stream = match_config_to_cell(stream, config=config)
-    # stream = clean(stream)
-    # stream = degrade(stream)
-    stream = populate(stream)
+    stream = match_config_to_cell(stream, config=config)
+    stream = clean(stream)
+    stream = degrade(stream)
     stream = coalesce_row(stream)
     for e in stream:
         print(e.as_dict())

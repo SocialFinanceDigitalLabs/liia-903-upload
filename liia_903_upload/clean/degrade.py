@@ -1,5 +1,3 @@
-from sfdata_stream_parser.checks import type_check
-from sfdata_stream_parser import events
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 
 from liia_903_upload.clean.converters import to_short_postcode, to_month_only_dob
