@@ -1,6 +1,6 @@
 import functools
-
 import tablib
+
 from sfdata_stream_parser import events
 
 
@@ -25,12 +25,35 @@ def coalesce_row(stream):
             yield event
 
 
+class TableEvent(events.ParseEvent):
+    pass
+
+
 def create_tables(stream):
     """
-    Append all the rows for a given table_name to create one concatenated dataframe
+    Append all the rows for a given table to create one concatenated data event
     """
-    data = tablib.Dataset()
+    data = None
+    for event in stream:
+        if isinstance(event, events.StartTable):
+            data = tablib.Dataset(headers=event.headers + ["LA", "YEAR"])
+        elif isinstance(event, events.EndTable):
+            yield event
+            yield TableEvent.from_event(event, data=data)
+            data = None
+        elif data is not None and isinstance(event, events.EndRow):
+            data.append(event.row + [event.la, event.year])
+        yield event
 
+
+def save_tables(stream):
+    """
+    Save the data events as csv files
+    """
+    for event in stream:
+        if isinstance(event, TableEvent):
+            dataset = event.data
+            return dataset.export(f"{event.filename[:-4]}_clean.csv")
 
 
 @functools.cache

@@ -7,7 +7,7 @@ from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 from liia_903_upload.clean.filters import clean
 from liia_903_upload.clean.populate import populate
 from liia_903_upload.clean.degrade import degrade
-from liia_903_upload.clean.file_creator import coalesce_row
+from liia_903_upload.clean.file_creator import coalesce_row, create_tables, save_tables
 from liia_903_upload.clean.config import inherit_table_name, add_table_name, load_config, match_config_to_cell
 
 
@@ -16,12 +16,12 @@ def findfiles():
     Locate the csv files within the given directory
     """
     data_dir = Path(r"C:\Users\patrick.troy\OneDrive - Social Finance Ltd\Work\Python\liia 903 upload\LDS")
-    for p in data_dir.glob("**/*.csv"):
+    for p in data_dir.glob("**/Inputs/*.csv"):
         yield events.StartContainer(path=p)
         yield events.EndContainer(path=p)
 
 
-@streamfilter(check=checks.type_check(events.StartContainer))
+@streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event)
 def add_filename(event):
     """
     Return the filename including the path to that file, so we can extract year and LA name data
@@ -55,14 +55,16 @@ def main():
     stream = add_filename(stream)
     stream = populate(stream)
     stream = parse_csv(stream)
-    stream = add_table_name(stream)
-    stream = inherit_table_name(stream)
-    stream = match_config_to_cell(stream, config=config)
-    stream = clean(stream)
-    stream = degrade(stream)
+    # stream = add_table_name(stream)
+    # stream = inherit_table_name(stream)
+    # stream = match_config_to_cell(stream, config=config)
+    # stream = clean(stream)
+    # stream = degrade(stream)
     stream = coalesce_row(stream)
-    for e in stream:
-        print(e.as_dict())
+    stream = create_tables(stream)
+    save_tables(stream)
+    # for e in stream:
+    #     print(e, e.as_dict())
 
 
 if __name__ == "__main__":
