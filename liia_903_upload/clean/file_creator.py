@@ -41,7 +41,7 @@ def create_tables(stream):
             yield event
             yield TableEvent.from_event(event, data=data)
             data = None
-        elif data is not None and isinstance(event, events.EndRow):
+        elif data is not None and isinstance(event, RowEvent):
             data.append(event.row + [event.la, event.year])
         yield event
 
@@ -53,7 +53,11 @@ def save_tables(stream):
     for event in stream:
         if isinstance(event, TableEvent):
             dataset = event.data
-            return dataset.export(f"{event.filename[:-4]}_clean.csv")
+            file = dataset.export("csv")
+            with open(f"{event.filename[:-4]}_clean.csv", "r") as f:
+                f.write(file.csv)
+
+            # f"{event.file_name[:-4]}_clean.csv"
 
 
 @functools.cache
