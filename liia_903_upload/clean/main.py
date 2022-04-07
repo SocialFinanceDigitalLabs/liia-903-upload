@@ -63,8 +63,6 @@ def main():
     stream = coalesce_row(stream)
     stream = create_tables(stream)
     save_tables(stream)
-    # for e in stream:
-    #     print(e, e.as_dict())
 
 
 if __name__ == "__main__":

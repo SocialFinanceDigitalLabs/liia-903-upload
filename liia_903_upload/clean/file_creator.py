@@ -1,5 +1,6 @@
 import functools
 import tablib
+import re
 
 from sfdata_stream_parser import events
 
@@ -48,16 +49,15 @@ def create_tables(stream):
 
 def save_tables(stream):
     """
-    Save the data events as csv files
+    Save the data events as csv files in the Outputs directory
     """
     for event in stream:
         if isinstance(event, TableEvent):
             dataset = event.data
-            file = dataset.export("csv")
-            with open(f"{event.filename[:-4]}_clean.csv", "r") as f:
-                f.write(file.csv)
-
-            # f"{event.file_name[:-4]}_clean.csv"
+            csv_data = dataset.export("csv")
+            file_dir = re.sub("Inputs", "Outputs", event.filename[:-4]) # Remove the .csv from the filename
+            with open(f"{file_dir}_clean.csv", "w", newline="") as f:
+                f.write(csv_data)
 
 
 @functools.cache
