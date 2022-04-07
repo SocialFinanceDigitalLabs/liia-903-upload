@@ -22,7 +22,7 @@ def to_date(string, dateformat):
     return blank if not in the right format
     """
     try:
-        string = datetime.strptime(string, dateformat) # Check this is possible
+        string = datetime.strptime(string, dateformat).date() # Check this is possible
     except ValueError:
         string = ""
     except TypeError:
