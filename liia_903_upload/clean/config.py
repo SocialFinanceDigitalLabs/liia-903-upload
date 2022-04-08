@@ -1,10 +1,11 @@
 from pathlib import Path
-from columns import column_names
 import yaml
 
 from sfdata_stream_parser import events
 from sfdata_stream_parser.filters.generic import streamfilter, pass_event
 from sfdata_stream_parser.checks import type_check
+
+from liia_903_upload.columns import column_names
 
 
 @streamfilter(check=type_check(events.StartTable), fail_function=pass_event, error_function=pass_event)
@@ -14,7 +15,9 @@ def add_table_name(event):
     """
     for table_name, expected_columns in column_names.items():
         if set(event.headers) == set(expected_columns):
-            return event.from_event(event, table_name=table_name)
+            yield event.from_event(event, table_name=table_name)
+        if event.table_name is None:
+            print(f"Failed to match {event.filename} to known column names")
 
 
 def inherit_table_name(stream):

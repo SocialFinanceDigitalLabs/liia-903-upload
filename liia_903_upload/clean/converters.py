@@ -63,6 +63,7 @@ def check_postcode(string):
         string = ""
     return string
 
+
 def to_short_postcode(string):
     """
     Remove whitespace from the beginning and end of postcodes and the last two digits for anonymity
