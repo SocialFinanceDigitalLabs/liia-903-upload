@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 
 
 def to_category(string, categories):
@@ -29,6 +30,38 @@ def to_date(string, dateformat):
         string = ""
     return string
 
+
+def to_integer(string, config):
+    """
+    Convert any strings that should be integers based on the config into integers
+    """
+    if config == "integer":
+        try:
+            string = int(string)
+        except ValueError:
+            string = ""
+        except TypeError:
+            string = ""
+        return string
+    else:
+        return string
+
+
+def check_postcode(string):
+    """
+    Checks that the postcodes are in the right format
+    returns blank if not in the right format
+    """
+    try:
+        match = re.search(r"[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}", string, re.IGNORECASE)
+        string = match.group(0)
+    except ValueError:
+        string = ""
+    except TypeError:
+        string = ""
+    except AttributeError:
+        string = ""
+    return string
 
 def to_short_postcode(string):
     """
