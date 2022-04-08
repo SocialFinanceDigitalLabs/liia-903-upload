@@ -16,8 +16,6 @@ def add_table_name(event):
     for table_name, expected_columns in column_names.items():
         if set(event.headers) == set(expected_columns):
             yield event.from_event(event, table_name=table_name)
-        if event.table_name is None:
-            print(f"Failed to match {event.filename} to known column names")
 
 
 def inherit_table_name(stream):
