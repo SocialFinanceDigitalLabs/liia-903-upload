@@ -16,7 +16,7 @@ def findfiles():
     Locate the csv files within the given directory
     """
     data_dir = Path(r"C:\Users\patrick.troy\OneDrive - Social Finance Ltd\Work\Python\liia 903 upload\LDS")
-    for p in data_dir.glob("**/Inputs/*.csv"):
+    for p in data_dir.glob("**/903/Inputs/*.csv"):
         yield events.StartContainer(path=p)
         yield events.EndContainer(path=p)
 
@@ -29,11 +29,7 @@ def add_filename(event):
     return event.from_event(event, filename=str(event.path.resolve()))
 
 
-def log_error(event, ex, *arg, **kwargs):
-    return event
-
-
-@streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event, error_function=log_error)
+@streamfilter(check=checks.type_check(events.StartContainer), fail_function=pass_event, error_function=pass_event)
 def parse_csv(event):
     """
     Parse the csv and return the row number, column number, header name and cell value
